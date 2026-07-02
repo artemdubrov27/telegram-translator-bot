@@ -102,8 +102,17 @@ def main():
     updater = Updater(TOKEN, use_context=True)
     dp = updater.dispatcher
 
+    # Команда /start
     dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, handle_menu))
+
+    # Обробник для кнопок і вибору мов
+    dp.add_handler(MessageHandler(
+        Filters.text & Filters.regex("^(Почати|Назад|Змінити мову|Англійська|Литовська|Українська|Російська)$"),
+        handle_menu
+    ))
+
+    # Обробник для тексту, який потрібно перекласти
+    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, translate_message))
 
     print("✅ Бот запущений і слухає повідомлення...")
     updater.start_polling()
