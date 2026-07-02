@@ -93,7 +93,13 @@ def translate_message(update: Update, context: CallbackContext):
 
     try:
         result = translator.translate(text, src=src, dest=dest)
-        update.message.reply_text(f"🔤 Переклад ({src} → {dest}):\n{result.text}")
+        src_name = [k for k, v in LANGUAGES.items() if v == src][0]
+        dest_name = [k for k, v in LANGUAGES.items() if v == dest][0]
+        reply_markup = ReplyKeyboardMarkup(MAIN_MENU, resize_keyboard=True)
+        update.message.reply_text(
+            f"🔤 Переклад ({src_name} → {dest_name}):\n{result.text}",
+            reply_markup=reply_markup
+        )
     except Exception:
         update.message.reply_text("⚠️ Помилка перекладу. Спробуйте ще раз.")
 
